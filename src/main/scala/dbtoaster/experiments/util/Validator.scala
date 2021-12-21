@@ -1,9 +1,9 @@
-package dbtoaster.experiments.window
+package dbtoaster.experiments.util
 
 import scala.collection.mutable
 import scala.io.Source
 
-object Validate {
+object Validator {
     def outputLineToTuple(line: String): (Int, Int, Int, Int) = {
         // pattern: (src, via1, via2, dst) -> 1
         val end = line.indexOf(")")
@@ -54,11 +54,11 @@ object Validate {
         result.toSet
     }
 
-    def main(args: Array[String]): Unit = {
-        val events = Source.fromResource("window/graph.csv").getLines().toList
+    def validate(graph: String, output: String): Unit = {
+        val events = Source.fromResource(graph).getLines().toList
         val snapshots = buildValidSnapshots(events.map(lineToTuple))
 
-        val lines = Source.fromResource("window/output.log").getLines()
+        val lines = Source.fromResource(output).getLines()
         var (success, paths, it) = getNextWindow(lines)
 
         while (success) {
